@@ -1,0 +1,12 @@
+# Python 3.10 recommended (TTS 0.22 supports Python 3.9-3.11).
+# On Python >= 3.12 (e.g. Google Colab) replace "TTS" with the maintained
+# fork "coqui-tts" - it has the same `from TTS.api import TTS` API.
+TTS==0.22.0
+transformers<4.50     # newer versions break the TTS 0.22 import
+librosa>=0.10
+soundfile>=0.12
+matplotlib>=3.7
+numpy
+scipy
+# optional, only for record_reference.py
+# sounddevice
