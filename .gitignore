@@ -1,10 +1,5 @@
 __pycache__/
-*.pyc
-.venv/
-venv/
-
-# EMO corpus archive and extracted audio (large, re-creatable)
 *.zip
 *.zip.*
-emo_raw/
+emo_wavs/
 dataset/wavs/
