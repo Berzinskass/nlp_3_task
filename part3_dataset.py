@@ -17,6 +17,10 @@ WAV_FOLDER = "emo_wavs"
 SPEAKER = "F3"  # F2, F3, F4, M3 or M4
 EMOTION = "Z"   # D joy, L sadness, N surprise, P anger, Z neutral
 
+# Find all wav files. A name like 0101-F3Z-0001.wav means speaker F3, emotion Z.
+all_wavs = glob.glob(f"{WAV_FOLDER}/**/*.wav", recursive=True)
+print("Speaker+emotion found:", Counter(os.path.basename(w).split("-")[1] for w in all_wavs))
+
 # Read transcriptions. Each line: wavs/Z/F3/0101-F3Z/0101-F3Z-0001.wav|01|text
 texts = {}
 with gzip.open("metadata_of_EMO_dataset.csv.gz", "rt", encoding="utf-8") as f:
@@ -24,11 +28,8 @@ with gzip.open("metadata_of_EMO_dataset.csv.gz", "rt", encoding="utf-8") as f:
         path, session, text = line.strip().split("|")
         texts[os.path.basename(path)] = text
 
-# Find all wav files. A name like 0101-F3Z-0001.wav means speaker F3, emotion Z.
-all_wavs = glob.glob(f"{WAV_FOLDER}/**/*.wav", recursive=True)
-print("Speaker+emotion found:", Counter(os.path.basename(w).split("-")[1] for w in all_wavs))
-
-selected = sorted(w for w in all_wavs if f"-{SPEAKER}{EMOTION}-" in os.path.basename(w))
+selected = sorted(w for w in all_wavs if f"-{SPEAKER}{EMOTION}-" in os.path.basename(w)
+                  and os.path.basename(w) in texts)  # skip files without transcription
 print(f"Selected speaker {SPEAKER}, emotion {EMOTION}: {len(selected)} recordings")
 if not selected:
     exit("No files - change SPEAKER and EMOTION to one of the pairs above.")
