@@ -9,7 +9,7 @@ import soundfile as sf
 
 
 def compare(natural_file, synthesized_file, picture_name):
-    fig, axes = plt.subplots(3, 2, figsize=(12, 9))
+    fig, axes = plt.subplots(3, 2, figsize=(12, 6.5))
 
     for col, file in enumerate([natural_file, synthesized_file]):
         # Audio info: duration, sampling frequency, format
@@ -43,6 +43,15 @@ def compare(natural_file, synthesized_file, picture_name):
 
         print(f"   mean F0 = {np.nanmean(f0):.0f} Hz, "
               f"F0 range = {np.nanmin(f0):.0f}-{np.nanmax(f0):.0f} Hz")
+
+        # Speech duration without the silence at the start and end
+        _, (start, end) = librosa.effects.trim(y, top_db=35)
+        print(f"   speech duration (silence removed) = {(end - start) / sr:.2f} s")
+
+        # Share of the 0-8 kHz energy that lies between 4 and 8 kHz
+        energy = spectrum ** 2
+        share = energy[(freqs >= 4000) & (freqs < 8000)].sum() / energy[freqs < 8000].sum()
+        print(f"   energy at 4-8 kHz = {share:.1%} of the 0-8 kHz energy")
 
     plt.tight_layout()
     plt.savefig(picture_name)
