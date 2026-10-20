@@ -3,3 +3,7 @@ __pycache__/
 *.zip.*
 emo_wavs/
 dataset/wavs/
+
+# Personal voice recordings (kept local)
+reference_*.wav
+output_*.wav
